@@ -141,7 +141,7 @@
             <div id='helpButton' class="containerHeaderButton">Social Media</div>
             <div id='musicPlayerButton' class="containerHeaderButton">Music Player</div>
             <div id='statsViewerButton' class="containerHeaderButton">Stats Viewer</div>
-            <div id='dateTimeButton' class="containerHeaderButtonTest">Wednesday, August 7 - 8:45 PM</div>
+            <div id='dateTimeButton' class="containerHeaderButtonTest"></div>
         </div>
         <div class="containerContent" id="content-box">
             <p>Landon Pritchard</p>
@@ -156,7 +156,6 @@
         let dropdown = null;
         let container = document.getElementById('content-box');
         
-
         document.addEventListener('DOMContentLoaded', () => {
             // Select the parent div with ID 'mydivheader'
             const parentDiv = document.getElementById('mydivheader');
@@ -173,13 +172,22 @@
                     buttonDiv.addEventListener('mouseleave', exitedDiv);
                 });
             }
-        });
+
+            const updateTime =  setInterval(() => {
+                const currentDate = new Date().toLocaleDateString('en-US', {weekday: "long", month: "long", day: "numeric"});
+                const currentTime = new Date().toLocaleTimeString('en-US', {hour12: true, hour: "numeric", minute: "numeric", second: "numeric"});
+                const showDate = currentDate + " - " + currentTime;
+                document.getElementById('dateTimeButton').textContent = showDate;
+            }, 1000);
+            });
 
         function fileButtonMouseEnter() {
             setTimeout(() => {
                 if (!dropdown && !isDropdownHovered) {
-                    createDropdown(this.id);
-                    isFileButtonHovered = true;
+                    if (this.id != 'dateTimeButton') {
+                        createDropdown(this.id);
+                        isFileButtonHovered = true;
+                    };
                 }
             }, 1);
         }
@@ -238,30 +246,11 @@
             dropdown.style.display = 'block';
 
             dropdownContainer = document.createElement('div')
-            if (id != 'dateTimeButton') {
-                for (i = 0; i < buttonList.length; i++) {
-                    let newButton = document.createElement('span')
-                    newButton.className = 'dropdownButton';
-                    newButton.textContent = buttonList[i];
-                    dropdownContainer.append(newButton)
-                }
-            }
-            else if (id == 'dateTimeButton') {
-                var iframe = document.createElement('iframe');
-                iframe.width = '210';
-                iframe.height = "fit-content";
-                iframe.style.padding = '0!important';
-                iframe.style.margin = '0!important';
-                iframe.style.border = 'none!important';
-                iframe.style.background = 'transparent!important';
-                iframe.marginHeight = '0';
-                iframe.marginWidth = '0';
-                iframe.frameBorder = '0';
-                iframe.scrolling = 'no';
-                iframe.src = "https://free.timeanddate.com/clock/i9hspl0g/n1986/fn6/fs16/fc9ff/tc000/ftb/bas2/bat1/bacfff/pa8/tt0/tw1/th1/ta1/tb4"
-                dropdownContainer.append(iframe)
-                dropdown.style.height = '10px'
-                dropdown.style.width = 'fit-content';
+            for (i = 0; i < buttonList.length; i++) {
+                let newButton = document.createElement('span')
+                newButton.className = 'dropdownButton';
+                newButton.textContent = buttonList[i];
+                dropdownContainer.append(newButton)
             }
             dropdown.append(dropdownContainer);
 
